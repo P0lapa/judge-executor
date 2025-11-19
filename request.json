@@ -1,0 +1,10 @@
+{
+  "submission_id": "1",
+  "user_id": "mock-user-uuid",
+  "task_id": "mock-task-uuid",
+  "code": "x = int(input())\nprint(x ** 2)",
+  "lang": "python",
+  "input": "5",
+  "time_limit_ms": 1000,
+  "memory_limit_mb": 256
+}

@@ -1,0 +1,28 @@
+syntax = "proto3";
+package judge;
+option go_package = "./proto;judge";
+
+message ExecuteRequest {
+    string submission_id = 1;  // Уникальный ID отправки (UUID как строка)
+    string user_id = 2;        // ID пользователя (UUID как строка)
+    string task_id = 3;        // ID задачи (UUID как строка)
+    string code = 4;          // Исходный код решения (строка)
+    string lang = 5;          // Язык программирования (e.g., "cpp", "java", "python", "kotlin", "go", "rust", "js")
+    repeated string input = 6;         // Входные данные для теста (строка, возможно многострочная)
+    int32 time_limit_ms = 7;  // Лимит времени в миллисекундах (e.g., 1000 для 1 секунды)
+    int32 memory_limit_mb = 8;// Лимит памяти в мегабайтах (e.g., 256)
+    repeated string additional_args = 9;  // Опционально: дополнительные флаги компиляции/запуска (e.g., для C++: "-O2")
+}
+
+message ExecuteResponse {
+    repeated string output = 1;        // Массив выводов (по одному на input)
+    repeated string stderr = 2;        // Массив ошибок
+    repeated double time_used_sec = 3;  // Массив времён
+    repeated int32 memory_used_kb = 4; // Массив памяти
+    repeated int32 exit_code = 5;      // Массив кодов выхода
+    string error_message = 6;          // Общая ошибка (if any)
+}
+
+service ExecutorService {
+    rpc Execute(ExecuteRequest) returns (ExecuteResponse);  // Unary RPC для синхронного вызова
+}
