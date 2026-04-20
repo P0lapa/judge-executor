@@ -1,10 +1,28 @@
 {
-  "submission_id": "1",
+  "submission_id": "2",
   "user_id": "mock-user-uuid",
   "task_id": "mock-task-uuid",
   "code": "x = int(input())\nprint(x ** 2)",
   "lang": "python",
-  "input": "5",
+  "test_cases": [
+    {
+      "input": "5",
+      "expected_output": "25"
+    },
+    {
+      "input": "2",
+      "expected_output": "4"
+    },
+    {
+      "input": "0",
+      "expected_output": "0"
+    },
+    {
+      "input": "10",
+      "expected_output": "100"
+    }
+  ],
   "time_limit_ms": 1000,
-  "memory_limit_mb": 256
+  "memory_limit_mb": 256,
+  "comparison_mode": "OUTPUT_COMPARISON_MODE_TRIMMED_EXACT"
 }

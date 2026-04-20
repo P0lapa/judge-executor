@@ -1,28 +1,62 @@
 syntax = "proto3";
+
 package judge;
+
 option go_package = "./proto;judge";
 
+enum OutputComparisonMode {
+    OUTPUT_COMPARISON_MODE_UNSPECIFIED = 0;
+    OUTPUT_COMPARISON_MODE_EXACT = 1;
+    OUTPUT_COMPARISON_MODE_TRIMMED_EXACT = 2;
+    OUTPUT_COMPARISON_MODE_IGNORE_TRAILING_SPACES = 3;
+}
+
+enum TestStatus {
+    TEST_STATUS_UNSPECIFIED = 0;
+    TEST_STATUS_AC = 1;
+    TEST_STATUS_WA = 2;
+    TEST_STATUS_RE = 3;
+    TEST_STATUS_TLE = 4;
+    TEST_STATUS_MLE = 5;
+    TEST_STATUS_CE = 6;
+    TEST_STATUS_SE = 7;
+}
+
+message TestCase {
+    string input = 1;
+    string expected_output = 2;
+}
+
 message ExecuteRequest {
-    string submission_id = 1;  // Уникальный ID отправки (UUID как строка)
-    string user_id = 2;        // ID пользователя (UUID как строка)
-    string task_id = 3;        // ID задачи (UUID как строка)
-    string code = 4;          // Исходный код решения (строка)
-    string lang = 5;          // Язык программирования (e.g., "cpp", "java", "python", "kotlin", "go", "rust", "js")
-    repeated string input = 6;         // Входные данные для теста (строка, возможно многострочная)
-    int32 time_limit_ms = 7;  // Лимит времени в миллисекундах (e.g., 1000 для 1 секунды)
-    int32 memory_limit_mb = 8;// Лимит памяти в мегабайтах (e.g., 256)
-    repeated string additional_args = 9;  // Опционально: дополнительные флаги компиляции/запуска (e.g., для C++: "-O2")
+    string submission_id = 1;
+    string user_id = 2;
+    string task_id = 3;
+    string code = 4;
+    string lang = 5;
+    repeated TestCase test_cases = 6;
+    int32 time_limit_ms = 7;
+    int32 memory_limit_mb = 8;
+    repeated string additional_args = 9;
+    OutputComparisonMode comparison_mode = 10;
+}
+
+message TestResult {
+    bool passed = 1;
+    TestStatus status = 2;
+    string input = 3;
+    string expected_output = 4;
+    string actual_output = 5;
+    string stderr = 6;
+    double time_used_sec = 7;
+    int32 memory_used_kb = 8;
+    int32 exit_code = 9;
 }
 
 message ExecuteResponse {
-    repeated string output = 1;        // Массив выводов (по одному на input)
-    repeated string stderr = 2;        // Массив ошибок
-    repeated double time_used_sec = 3;  // Массив времён
-    repeated int32 memory_used_kb = 4; // Массив памяти
-    repeated int32 exit_code = 5;      // Массив кодов выхода
-    string error_message = 6;          // Общая ошибка (if any)
+    repeated TestResult results = 1;
+    string error_message = 2;
 }
 
 service ExecutorService {
-    rpc Execute(ExecuteRequest) returns (ExecuteResponse);  // Unary RPC для синхронного вызова
+    rpc Execute(ExecuteRequest) returns (ExecuteResponse);
 }

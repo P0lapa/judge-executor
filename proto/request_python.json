@@ -1,0 +1,24 @@
+{
+  "submission_id": "python-sample-1",
+  "user_id": "mock-user-uuid",
+  "task_id": "square-task",
+  "code": "x = int(input())\nprint(x * x)",
+  "lang": "python",
+  "test_cases": [
+    {
+      "input": "5",
+      "expected_output": "25"
+    },
+    {
+      "input": "-3",
+      "expected_output": "9"
+    },
+    {
+      "input": "0",
+      "expected_output": "0"
+    }
+  ],
+  "time_limit_ms": 1000,
+  "memory_limit_mb": 256,
+  "comparison_mode": "OUTPUT_COMPARISON_MODE_TRIMMED_EXACT"
+}

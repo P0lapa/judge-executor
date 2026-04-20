@@ -21,24 +21,193 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type OutputComparisonMode int32
+
+const (
+	OutputComparisonMode_OUTPUT_COMPARISON_MODE_UNSPECIFIED            OutputComparisonMode = 0
+	OutputComparisonMode_OUTPUT_COMPARISON_MODE_EXACT                  OutputComparisonMode = 1
+	OutputComparisonMode_OUTPUT_COMPARISON_MODE_TRIMMED_EXACT          OutputComparisonMode = 2
+	OutputComparisonMode_OUTPUT_COMPARISON_MODE_IGNORE_TRAILING_SPACES OutputComparisonMode = 3
+)
+
+// Enum value maps for OutputComparisonMode.
+var (
+	OutputComparisonMode_name = map[int32]string{
+		0: "OUTPUT_COMPARISON_MODE_UNSPECIFIED",
+		1: "OUTPUT_COMPARISON_MODE_EXACT",
+		2: "OUTPUT_COMPARISON_MODE_TRIMMED_EXACT",
+		3: "OUTPUT_COMPARISON_MODE_IGNORE_TRAILING_SPACES",
+	}
+	OutputComparisonMode_value = map[string]int32{
+		"OUTPUT_COMPARISON_MODE_UNSPECIFIED":            0,
+		"OUTPUT_COMPARISON_MODE_EXACT":                  1,
+		"OUTPUT_COMPARISON_MODE_TRIMMED_EXACT":          2,
+		"OUTPUT_COMPARISON_MODE_IGNORE_TRAILING_SPACES": 3,
+	}
+)
+
+func (x OutputComparisonMode) Enum() *OutputComparisonMode {
+	p := new(OutputComparisonMode)
+	*p = x
+	return p
+}
+
+func (x OutputComparisonMode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (OutputComparisonMode) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_judge_proto_enumTypes[0].Descriptor()
+}
+
+func (OutputComparisonMode) Type() protoreflect.EnumType {
+	return &file_proto_judge_proto_enumTypes[0]
+}
+
+func (x OutputComparisonMode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use OutputComparisonMode.Descriptor instead.
+func (OutputComparisonMode) EnumDescriptor() ([]byte, []int) {
+	return file_proto_judge_proto_rawDescGZIP(), []int{0}
+}
+
+type TestStatus int32
+
+const (
+	TestStatus_TEST_STATUS_UNSPECIFIED TestStatus = 0
+	TestStatus_TEST_STATUS_AC          TestStatus = 1
+	TestStatus_TEST_STATUS_WA          TestStatus = 2
+	TestStatus_TEST_STATUS_RE          TestStatus = 3
+	TestStatus_TEST_STATUS_TLE         TestStatus = 4
+	TestStatus_TEST_STATUS_MLE         TestStatus = 5
+	TestStatus_TEST_STATUS_CE          TestStatus = 6
+	TestStatus_TEST_STATUS_SE          TestStatus = 7
+)
+
+// Enum value maps for TestStatus.
+var (
+	TestStatus_name = map[int32]string{
+		0: "TEST_STATUS_UNSPECIFIED",
+		1: "TEST_STATUS_AC",
+		2: "TEST_STATUS_WA",
+		3: "TEST_STATUS_RE",
+		4: "TEST_STATUS_TLE",
+		5: "TEST_STATUS_MLE",
+		6: "TEST_STATUS_CE",
+		7: "TEST_STATUS_SE",
+	}
+	TestStatus_value = map[string]int32{
+		"TEST_STATUS_UNSPECIFIED": 0,
+		"TEST_STATUS_AC":          1,
+		"TEST_STATUS_WA":          2,
+		"TEST_STATUS_RE":          3,
+		"TEST_STATUS_TLE":         4,
+		"TEST_STATUS_MLE":         5,
+		"TEST_STATUS_CE":          6,
+		"TEST_STATUS_SE":          7,
+	}
+)
+
+func (x TestStatus) Enum() *TestStatus {
+	p := new(TestStatus)
+	*p = x
+	return p
+}
+
+func (x TestStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (TestStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_judge_proto_enumTypes[1].Descriptor()
+}
+
+func (TestStatus) Type() protoreflect.EnumType {
+	return &file_proto_judge_proto_enumTypes[1]
+}
+
+func (x TestStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use TestStatus.Descriptor instead.
+func (TestStatus) EnumDescriptor() ([]byte, []int) {
+	return file_proto_judge_proto_rawDescGZIP(), []int{1}
+}
+
+type TestCase struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Input          string                 `protobuf:"bytes,1,opt,name=input,proto3" json:"input,omitempty"`
+	ExpectedOutput string                 `protobuf:"bytes,2,opt,name=expected_output,json=expectedOutput,proto3" json:"expected_output,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *TestCase) Reset() {
+	*x = TestCase{}
+	mi := &file_proto_judge_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TestCase) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TestCase) ProtoMessage() {}
+
+func (x *TestCase) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_judge_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TestCase.ProtoReflect.Descriptor instead.
+func (*TestCase) Descriptor() ([]byte, []int) {
+	return file_proto_judge_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *TestCase) GetInput() string {
+	if x != nil {
+		return x.Input
+	}
+	return ""
+}
+
+func (x *TestCase) GetExpectedOutput() string {
+	if x != nil {
+		return x.ExpectedOutput
+	}
+	return ""
+}
+
 type ExecuteRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	SubmissionId   string                 `protobuf:"bytes,1,opt,name=submission_id,json=submissionId,proto3" json:"submission_id,omitempty"`       // Уникальный ID отправки (UUID как строка)
-	UserId         string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                         // ID пользователя (UUID как строка)
-	TaskId         string                 `protobuf:"bytes,3,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`                         // ID задачи (UUID как строка)
-	Code           string                 `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"`                                           // Исходный код решения (строка)
-	Lang           string                 `protobuf:"bytes,5,opt,name=lang,proto3" json:"lang,omitempty"`                                           // Язык программирования (e.g., "cpp", "java", "python", "kotlin", "go", "rust", "js")
-	Input          []string               `protobuf:"bytes,6,rep,name=input,proto3" json:"input,omitempty"`                                         // Входные данные для теста (строка, возможно многострочная)
-	TimeLimitMs    int32                  `protobuf:"varint,7,opt,name=time_limit_ms,json=timeLimitMs,proto3" json:"time_limit_ms,omitempty"`       // Лимит времени в миллисекундах (e.g., 1000 для 1 секунды)
-	MemoryLimitMb  int32                  `protobuf:"varint,8,opt,name=memory_limit_mb,json=memoryLimitMb,proto3" json:"memory_limit_mb,omitempty"` // Лимит памяти в мегабайтах (e.g., 256)
-	AdditionalArgs []string               `protobuf:"bytes,9,rep,name=additional_args,json=additionalArgs,proto3" json:"additional_args,omitempty"` // Опционально: дополнительные флаги компиляции/запуска (e.g., для C++: "-O2")
+	SubmissionId   string                 `protobuf:"bytes,1,opt,name=submission_id,json=submissionId,proto3" json:"submission_id,omitempty"`
+	UserId         string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	TaskId         string                 `protobuf:"bytes,3,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
+	Code           string                 `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"`
+	Lang           string                 `protobuf:"bytes,5,opt,name=lang,proto3" json:"lang,omitempty"`
+	TestCases      []*TestCase            `protobuf:"bytes,6,rep,name=test_cases,json=testCases,proto3" json:"test_cases,omitempty"`
+	TimeLimitMs    int32                  `protobuf:"varint,7,opt,name=time_limit_ms,json=timeLimitMs,proto3" json:"time_limit_ms,omitempty"`
+	MemoryLimitMb  int32                  `protobuf:"varint,8,opt,name=memory_limit_mb,json=memoryLimitMb,proto3" json:"memory_limit_mb,omitempty"`
+	AdditionalArgs []string               `protobuf:"bytes,9,rep,name=additional_args,json=additionalArgs,proto3" json:"additional_args,omitempty"`
+	ComparisonMode OutputComparisonMode   `protobuf:"varint,10,opt,name=comparison_mode,json=comparisonMode,proto3,enum=judge.OutputComparisonMode" json:"comparison_mode,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
 
 func (x *ExecuteRequest) Reset() {
 	*x = ExecuteRequest{}
-	mi := &file_proto_judge_proto_msgTypes[0]
+	mi := &file_proto_judge_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -50,7 +219,7 @@ func (x *ExecuteRequest) String() string {
 func (*ExecuteRequest) ProtoMessage() {}
 
 func (x *ExecuteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_judge_proto_msgTypes[0]
+	mi := &file_proto_judge_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -63,7 +232,7 @@ func (x *ExecuteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteRequest.ProtoReflect.Descriptor instead.
 func (*ExecuteRequest) Descriptor() ([]byte, []int) {
-	return file_proto_judge_proto_rawDescGZIP(), []int{0}
+	return file_proto_judge_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ExecuteRequest) GetSubmissionId() string {
@@ -101,9 +270,9 @@ func (x *ExecuteRequest) GetLang() string {
 	return ""
 }
 
-func (x *ExecuteRequest) GetInput() []string {
+func (x *ExecuteRequest) GetTestCases() []*TestCase {
 	if x != nil {
-		return x.Input
+		return x.TestCases
 	}
 	return nil
 }
@@ -129,21 +298,132 @@ func (x *ExecuteRequest) GetAdditionalArgs() []string {
 	return nil
 }
 
+func (x *ExecuteRequest) GetComparisonMode() OutputComparisonMode {
+	if x != nil {
+		return x.ComparisonMode
+	}
+	return OutputComparisonMode_OUTPUT_COMPARISON_MODE_UNSPECIFIED
+}
+
+type TestResult struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Passed         bool                   `protobuf:"varint,1,opt,name=passed,proto3" json:"passed,omitempty"`
+	Status         TestStatus             `protobuf:"varint,2,opt,name=status,proto3,enum=judge.TestStatus" json:"status,omitempty"`
+	Input          string                 `protobuf:"bytes,3,opt,name=input,proto3" json:"input,omitempty"`
+	ExpectedOutput string                 `protobuf:"bytes,4,opt,name=expected_output,json=expectedOutput,proto3" json:"expected_output,omitempty"`
+	ActualOutput   string                 `protobuf:"bytes,5,opt,name=actual_output,json=actualOutput,proto3" json:"actual_output,omitempty"`
+	Stderr         string                 `protobuf:"bytes,6,opt,name=stderr,proto3" json:"stderr,omitempty"`
+	TimeUsedSec    float64                `protobuf:"fixed64,7,opt,name=time_used_sec,json=timeUsedSec,proto3" json:"time_used_sec,omitempty"`
+	MemoryUsedKb   int32                  `protobuf:"varint,8,opt,name=memory_used_kb,json=memoryUsedKb,proto3" json:"memory_used_kb,omitempty"`
+	ExitCode       int32                  `protobuf:"varint,9,opt,name=exit_code,json=exitCode,proto3" json:"exit_code,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *TestResult) Reset() {
+	*x = TestResult{}
+	mi := &file_proto_judge_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TestResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TestResult) ProtoMessage() {}
+
+func (x *TestResult) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_judge_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TestResult.ProtoReflect.Descriptor instead.
+func (*TestResult) Descriptor() ([]byte, []int) {
+	return file_proto_judge_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *TestResult) GetPassed() bool {
+	if x != nil {
+		return x.Passed
+	}
+	return false
+}
+
+func (x *TestResult) GetStatus() TestStatus {
+	if x != nil {
+		return x.Status
+	}
+	return TestStatus_TEST_STATUS_UNSPECIFIED
+}
+
+func (x *TestResult) GetInput() string {
+	if x != nil {
+		return x.Input
+	}
+	return ""
+}
+
+func (x *TestResult) GetExpectedOutput() string {
+	if x != nil {
+		return x.ExpectedOutput
+	}
+	return ""
+}
+
+func (x *TestResult) GetActualOutput() string {
+	if x != nil {
+		return x.ActualOutput
+	}
+	return ""
+}
+
+func (x *TestResult) GetStderr() string {
+	if x != nil {
+		return x.Stderr
+	}
+	return ""
+}
+
+func (x *TestResult) GetTimeUsedSec() float64 {
+	if x != nil {
+		return x.TimeUsedSec
+	}
+	return 0
+}
+
+func (x *TestResult) GetMemoryUsedKb() int32 {
+	if x != nil {
+		return x.MemoryUsedKb
+	}
+	return 0
+}
+
+func (x *TestResult) GetExitCode() int32 {
+	if x != nil {
+		return x.ExitCode
+	}
+	return 0
+}
+
 type ExecuteResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Output        []string               `protobuf:"bytes,1,rep,name=output,proto3" json:"output,omitempty"`                                           // Массив выводов (по одному на input)
-	Stderr        []string               `protobuf:"bytes,2,rep,name=stderr,proto3" json:"stderr,omitempty"`                                           // Массив ошибок
-	TimeUsedSec   []float64              `protobuf:"fixed64,3,rep,packed,name=time_used_sec,json=timeUsedSec,proto3" json:"time_used_sec,omitempty"`   // Массив времён
-	MemoryUsedKb  []int32                `protobuf:"varint,4,rep,packed,name=memory_used_kb,json=memoryUsedKb,proto3" json:"memory_used_kb,omitempty"` // Массив памяти
-	ExitCode      []int32                `protobuf:"varint,5,rep,packed,name=exit_code,json=exitCode,proto3" json:"exit_code,omitempty"`               // Массив кодов выхода
-	ErrorMessage  string                 `protobuf:"bytes,6,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`           // Общая ошибка (if any)
+	Results       []*TestResult          `protobuf:"bytes,1,rep,name=results,proto3" json:"results,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,2,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ExecuteResponse) Reset() {
 	*x = ExecuteResponse{}
-	mi := &file_proto_judge_proto_msgTypes[1]
+	mi := &file_proto_judge_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -155,7 +435,7 @@ func (x *ExecuteResponse) String() string {
 func (*ExecuteResponse) ProtoMessage() {}
 
 func (x *ExecuteResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_judge_proto_msgTypes[1]
+	mi := &file_proto_judge_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -168,40 +448,12 @@ func (x *ExecuteResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteResponse.ProtoReflect.Descriptor instead.
 func (*ExecuteResponse) Descriptor() ([]byte, []int) {
-	return file_proto_judge_proto_rawDescGZIP(), []int{1}
+	return file_proto_judge_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ExecuteResponse) GetOutput() []string {
+func (x *ExecuteResponse) GetResults() []*TestResult {
 	if x != nil {
-		return x.Output
-	}
-	return nil
-}
-
-func (x *ExecuteResponse) GetStderr() []string {
-	if x != nil {
-		return x.Stderr
-	}
-	return nil
-}
-
-func (x *ExecuteResponse) GetTimeUsedSec() []float64 {
-	if x != nil {
-		return x.TimeUsedSec
-	}
-	return nil
-}
-
-func (x *ExecuteResponse) GetMemoryUsedKb() []int32 {
-	if x != nil {
-		return x.MemoryUsedKb
-	}
-	return nil
-}
-
-func (x *ExecuteResponse) GetExitCode() []int32 {
-	if x != nil {
-		return x.ExitCode
+		return x.Results
 	}
 	return nil
 }
@@ -217,24 +469,52 @@ var File_proto_judge_proto protoreflect.FileDescriptor
 
 const file_proto_judge_proto_rawDesc = "" +
 	"\n" +
-	"\x11proto/judge.proto\x12\x05judge\"\x9a\x02\n" +
+	"\x11proto/judge.proto\x12\x05judge\"I\n" +
+	"\bTestCase\x12\x14\n" +
+	"\x05input\x18\x01 \x01(\tR\x05input\x12'\n" +
+	"\x0fexpected_output\x18\x02 \x01(\tR\x0eexpectedOutput\"\xfa\x02\n" +
 	"\x0eExecuteRequest\x12#\n" +
 	"\rsubmission_id\x18\x01 \x01(\tR\fsubmissionId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x17\n" +
 	"\atask_id\x18\x03 \x01(\tR\x06taskId\x12\x12\n" +
 	"\x04code\x18\x04 \x01(\tR\x04code\x12\x12\n" +
-	"\x04lang\x18\x05 \x01(\tR\x04lang\x12\x14\n" +
-	"\x05input\x18\x06 \x03(\tR\x05input\x12\"\n" +
+	"\x04lang\x18\x05 \x01(\tR\x04lang\x12.\n" +
+	"\n" +
+	"test_cases\x18\x06 \x03(\v2\x0f.judge.TestCaseR\ttestCases\x12\"\n" +
 	"\rtime_limit_ms\x18\a \x01(\x05R\vtimeLimitMs\x12&\n" +
 	"\x0fmemory_limit_mb\x18\b \x01(\x05R\rmemoryLimitMb\x12'\n" +
-	"\x0fadditional_args\x18\t \x03(\tR\x0eadditionalArgs\"\xcd\x01\n" +
-	"\x0fExecuteResponse\x12\x16\n" +
-	"\x06output\x18\x01 \x03(\tR\x06output\x12\x16\n" +
-	"\x06stderr\x18\x02 \x03(\tR\x06stderr\x12\"\n" +
-	"\rtime_used_sec\x18\x03 \x03(\x01R\vtimeUsedSec\x12$\n" +
-	"\x0ememory_used_kb\x18\x04 \x03(\x05R\fmemoryUsedKb\x12\x1b\n" +
-	"\texit_code\x18\x05 \x03(\x05R\bexitCode\x12#\n" +
-	"\rerror_message\x18\x06 \x01(\tR\ferrorMessage2K\n" +
+	"\x0fadditional_args\x18\t \x03(\tR\x0eadditionalArgs\x12D\n" +
+	"\x0fcomparison_mode\x18\n" +
+	" \x01(\x0e2\x1b.judge.OutputComparisonModeR\x0ecomparisonMode\"\xb2\x02\n" +
+	"\n" +
+	"TestResult\x12\x16\n" +
+	"\x06passed\x18\x01 \x01(\bR\x06passed\x12)\n" +
+	"\x06status\x18\x02 \x01(\x0e2\x11.judge.TestStatusR\x06status\x12\x14\n" +
+	"\x05input\x18\x03 \x01(\tR\x05input\x12'\n" +
+	"\x0fexpected_output\x18\x04 \x01(\tR\x0eexpectedOutput\x12#\n" +
+	"\ractual_output\x18\x05 \x01(\tR\factualOutput\x12\x16\n" +
+	"\x06stderr\x18\x06 \x01(\tR\x06stderr\x12\"\n" +
+	"\rtime_used_sec\x18\a \x01(\x01R\vtimeUsedSec\x12$\n" +
+	"\x0ememory_used_kb\x18\b \x01(\x05R\fmemoryUsedKb\x12\x1b\n" +
+	"\texit_code\x18\t \x01(\x05R\bexitCode\"c\n" +
+	"\x0fExecuteResponse\x12+\n" +
+	"\aresults\x18\x01 \x03(\v2\x11.judge.TestResultR\aresults\x12#\n" +
+	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage*\xbd\x01\n" +
+	"\x14OutputComparisonMode\x12&\n" +
+	"\"OUTPUT_COMPARISON_MODE_UNSPECIFIED\x10\x00\x12 \n" +
+	"\x1cOUTPUT_COMPARISON_MODE_EXACT\x10\x01\x12(\n" +
+	"$OUTPUT_COMPARISON_MODE_TRIMMED_EXACT\x10\x02\x121\n" +
+	"-OUTPUT_COMPARISON_MODE_IGNORE_TRAILING_SPACES\x10\x03*\xb7\x01\n" +
+	"\n" +
+	"TestStatus\x12\x1b\n" +
+	"\x17TEST_STATUS_UNSPECIFIED\x10\x00\x12\x12\n" +
+	"\x0eTEST_STATUS_AC\x10\x01\x12\x12\n" +
+	"\x0eTEST_STATUS_WA\x10\x02\x12\x12\n" +
+	"\x0eTEST_STATUS_RE\x10\x03\x12\x13\n" +
+	"\x0fTEST_STATUS_TLE\x10\x04\x12\x13\n" +
+	"\x0fTEST_STATUS_MLE\x10\x05\x12\x12\n" +
+	"\x0eTEST_STATUS_CE\x10\x06\x12\x12\n" +
+	"\x0eTEST_STATUS_SE\x10\a2K\n" +
 	"\x0fExecutorService\x128\n" +
 	"\aExecute\x12\x15.judge.ExecuteRequest\x1a\x16.judge.ExecuteResponseB\x0fZ\r./proto;judgeb\x06proto3"
 
@@ -250,19 +530,28 @@ func file_proto_judge_proto_rawDescGZIP() []byte {
 	return file_proto_judge_proto_rawDescData
 }
 
-var file_proto_judge_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_judge_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_proto_judge_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_judge_proto_goTypes = []any{
-	(*ExecuteRequest)(nil),  // 0: judge.ExecuteRequest
-	(*ExecuteResponse)(nil), // 1: judge.ExecuteResponse
+	(OutputComparisonMode)(0), // 0: judge.OutputComparisonMode
+	(TestStatus)(0),           // 1: judge.TestStatus
+	(*TestCase)(nil),          // 2: judge.TestCase
+	(*ExecuteRequest)(nil),    // 3: judge.ExecuteRequest
+	(*TestResult)(nil),        // 4: judge.TestResult
+	(*ExecuteResponse)(nil),   // 5: judge.ExecuteResponse
 }
 var file_proto_judge_proto_depIdxs = []int32{
-	0, // 0: judge.ExecutorService.Execute:input_type -> judge.ExecuteRequest
-	1, // 1: judge.ExecutorService.Execute:output_type -> judge.ExecuteResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	2, // 0: judge.ExecuteRequest.test_cases:type_name -> judge.TestCase
+	0, // 1: judge.ExecuteRequest.comparison_mode:type_name -> judge.OutputComparisonMode
+	1, // 2: judge.TestResult.status:type_name -> judge.TestStatus
+	4, // 3: judge.ExecuteResponse.results:type_name -> judge.TestResult
+	3, // 4: judge.ExecutorService.Execute:input_type -> judge.ExecuteRequest
+	5, // 5: judge.ExecutorService.Execute:output_type -> judge.ExecuteResponse
+	5, // [5:6] is the sub-list for method output_type
+	4, // [4:5] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_proto_judge_proto_init() }
@@ -275,13 +564,14 @@ func file_proto_judge_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_judge_proto_rawDesc), len(file_proto_judge_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   2,
+			NumEnums:      2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_proto_judge_proto_goTypes,
 		DependencyIndexes: file_proto_judge_proto_depIdxs,
+		EnumInfos:         file_proto_judge_proto_enumTypes,
 		MessageInfos:      file_proto_judge_proto_msgTypes,
 	}.Build()
 	File_proto_judge_proto = out.File

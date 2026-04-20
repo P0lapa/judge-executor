@@ -1,0 +1,24 @@
+{
+  "submission_id": "java-sample-1",
+  "user_id": "mock-user-uuid",
+  "task_id": "square-task",
+  "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        long x = scanner.nextLong();\n        System.out.println(x * x);\n    }\n}",
+  "lang": "java",
+  "test_cases": [
+    {
+      "input": "5",
+      "expected_output": "25"
+    },
+    {
+      "input": "-3",
+      "expected_output": "9"
+    },
+    {
+      "input": "7",
+      "expected_output": "49"
+    }
+  ],
+  "time_limit_ms": 1000,
+  "memory_limit_mb": 256,
+  "comparison_mode": "OUTPUT_COMPARISON_MODE_TRIMMED_EXACT"
+}

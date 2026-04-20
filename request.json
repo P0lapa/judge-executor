@@ -4,7 +4,17 @@
   "task_id": "mock-task-uuid",
   "code": "x = int(input())\nprint(x ** 2)",
   "lang": "python",
-  "input": "5",
+  "test_cases": [
+    {
+      "input": "5",
+      "expected_output": "25"
+    },
+    {
+      "input": "-3",
+      "expected_output": "9"
+    }
+  ],
   "time_limit_ms": 1000,
-  "memory_limit_mb": 256
+  "memory_limit_mb": 256,
+  "comparison_mode": "OUTPUT_COMPARISON_MODE_TRIMMED_EXACT"
 }
