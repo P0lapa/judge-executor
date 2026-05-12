@@ -1,6 +1,8 @@
 package sandbox
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -69,11 +71,98 @@ func TestBuildExecCommandUsesVirtualMemoryLimitForNonJvm(t *testing.T) {
 	}
 }
 
-func TestValidateTestCases(t *testing.T) {
-	err := validateTestCases([]judgecore.RunResult{
+func TestValidateRunCases(t *testing.T) {
+	err := validateRunCases([]judgecore.RunResult{
 		{Input: strings.Repeat("x", maxInputSize+1), ExpectedOutput: "ok"},
 	})
 	if err == nil {
-		t.Fatal("validateTestCases() expected error for oversized input")
+		t.Fatal("validateRunCases() expected error for oversized input")
+	}
+}
+
+func TestBuildGeneratedResultStatuses(t *testing.T) {
+	tests := []struct {
+		name   string
+		input  judgecore.RunResult
+		status judgecore.Status
+	}{
+		{
+			name: "accepted result for successful execution",
+			input: judgecore.RunResult{
+				Input:        "1",
+				ActualOutput: "ok",
+				ExitCode:     0,
+			},
+			status: judgecore.StatusAccepted,
+		},
+		{
+			name: "runtime error result",
+			input: judgecore.RunResult{
+				Input:        "1",
+				ActualOutput: "boom",
+				ExitCode:     1,
+			},
+			status: judgecore.StatusRuntimeError,
+		},
+		{
+			name: "time limit result",
+			input: judgecore.RunResult{
+				Input:    "1",
+				ExitCode: 124,
+				TimedOut: true,
+			},
+			status: judgecore.StatusTimeLimitExceeded,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := buildGeneratedResult(tt.input)
+			if got.Status != tt.status {
+				t.Fatalf("buildGeneratedResult().Status = %q, want %q", got.Status, tt.status)
+			}
+		})
+	}
+}
+
+func TestGetWorkdirRootsUsesEnvironment(t *testing.T) {
+	t.Setenv("JUDGE_WORKDIR_CONTAINER", "/judge-workdir")
+	t.Setenv("JUDGE_WORKDIR_HOST", "C:/host/judge-workdir")
+
+	containerRoot, hostRoot := getWorkdirRoots()
+	if containerRoot != "/judge-workdir" {
+		t.Fatalf("containerRoot = %q", containerRoot)
+	}
+	if hostRoot != "C:/host/judge-workdir" {
+		t.Fatalf("hostRoot = %q", hostRoot)
+	}
+}
+
+func TestGetWorkdirRootsFallsBackToContainerRoot(t *testing.T) {
+	t.Setenv("JUDGE_WORKDIR_CONTAINER", "/judge-workdir")
+	t.Setenv("JUDGE_WORKDIR_HOST", "")
+
+	containerRoot, hostRoot := getWorkdirRoots()
+	if containerRoot != "/judge-workdir" || hostRoot != "/judge-workdir" {
+		t.Fatalf("roots = %q %q", containerRoot, hostRoot)
+	}
+}
+
+func TestPrepareWorkdirMapsContainerDirToHostDir(t *testing.T) {
+	containerRoot := t.TempDir()
+	hostRoot := filepath.Join("C:", "judge-workdir")
+
+	containerDir, hostDir, err := prepareWorkdir(containerRoot, hostRoot)
+	if err != nil {
+		t.Fatalf("prepareWorkdir() error = %v", err)
+	}
+	defer os.RemoveAll(containerDir)
+
+	if filepath.Dir(containerDir) != containerRoot {
+		t.Fatalf("containerDir = %q, want inside %q", containerDir, containerRoot)
+	}
+	wantHostDir := filepath.ToSlash(filepath.Join(hostRoot, filepath.Base(containerDir)))
+	if hostDir != wantHostDir {
+		t.Fatalf("hostDir = %q, want %q", hostDir, wantHostDir)
 	}
 }

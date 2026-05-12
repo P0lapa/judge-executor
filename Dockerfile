@@ -1,10 +1,23 @@
-FROM eclipse-temurin:17-jdk
+FROM golang:1.26.3-alpine AS builder
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends wget unzip time && \
-    wget https://github.com/JetBrains/kotlin/releases/download/v1.9.24/kotlin-compiler-1.9.24.zip && \
-    unzip kotlin-compiler-1.9.24.zip -d /opt/kotlin && \
-    rm kotlin-compiler-1.9.24.zip && \
-    rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
-ENV PATH="/opt/kotlin/kotlinc/bin:${PATH}"
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+RUN go build -o judge-executor .
+
+FROM alpine:3.20
+
+WORKDIR /app
+
+RUN apk add --no-cache docker-cli ca-certificates
+
+COPY --from=builder /app/judge-executor ./judge-executor
+COPY --from=builder /app/docker ./docker
+
+EXPOSE 50051
+
+CMD ["./judge-executor"]

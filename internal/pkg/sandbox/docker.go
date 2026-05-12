@@ -51,10 +51,49 @@ func JudgeInDocker(
 	additionalArgs []string,
 	comparison judgecore.ComparisonMode,
 ) ([]judgecore.TestResult, string) {
+	runResults, errMsg := runInDocker(ctx, lang, code, testCases, timeLimitMs, memLimitMb, additionalArgs)
+	if errMsg != "" {
+		return nil, errMsg
+	}
+
+	results := make([]judgecore.TestResult, 0, len(runResults))
+	for _, runResult := range runResults {
+		results = append(results, judgecore.BuildTestResult(runResult, comparison))
+	}
+
+	return results, ""
+}
+
+func GenerateOutputsInDocker(
+	ctx context.Context,
+	lang string,
+	code string,
+	inputs []string,
+	timeLimitMs int32,
+	memLimitMb int32,
+	additionalArgs []string,
+) ([]judgecore.RunResult, string) {
+	testCases := make([]judgecore.RunResult, 0, len(inputs))
+	for _, input := range inputs {
+		testCases = append(testCases, judgecore.RunResult{Input: input})
+	}
+
+	return runInDocker(ctx, lang, code, testCases, timeLimitMs, memLimitMb, additionalArgs)
+}
+
+func runInDocker(
+	ctx context.Context,
+	lang string,
+	code string,
+	testCases []judgecore.RunResult,
+	timeLimitMs int32,
+	memLimitMb int32,
+	additionalArgs []string,
+) ([]judgecore.RunResult, string) {
 	if err := validateCode(code); err != nil {
 		return nil, err.Error()
 	}
-	if err := validateTestCases(testCases); err != nil {
+	if err := validateRunCases(testCases); err != nil {
 		return nil, err.Error()
 	}
 
@@ -69,7 +108,8 @@ func JudgeInDocker(
 	}
 	defer cli.Close()
 
-	workDir, err := os.MkdirTemp("", "judge-*")
+	containerWorkdirRoot, hostWorkdirRoot := getWorkdirRoots()
+	workDir, hostWorkDir, err := prepareWorkdir(containerWorkdirRoot, hostWorkdirRoot)
 	if err != nil {
 		return nil, fmt.Sprintf("temp dir error: %v", err)
 	}
@@ -79,17 +119,17 @@ func JudgeInDocker(
 		return nil, fmt.Sprintf("write code error: %v", err)
 	}
 
-	if compileErr := compileIfNeeded(ctx, cli, config, workDir, additionalArgs); compileErr != "" {
+	if compileErr := compileIfNeeded(ctx, cli, config, hostWorkDir, additionalArgs); compileErr != "" {
 		return nil, compileErr
 	}
 
-	containerID, err := startRunnerContainer(ctx, cli, config.Image, workDir)
+	containerID, err := startRunnerContainer(ctx, cli, config.Image, hostWorkDir)
 	if err != nil {
 		return nil, err.Error()
 	}
 	defer removeContainer(cli, containerID)
 
-	results := make([]judgecore.TestResult, 0, len(testCases))
+	results := make([]judgecore.RunResult, 0, len(testCases))
 	for i, testCase := range testCases {
 		inputPath := filepath.Join(workDir, "input.txt")
 		if err := os.WriteFile(inputPath, []byte(testCase.Input), 0644); err != nil {
@@ -101,10 +141,38 @@ func JudgeInDocker(
 			return nil, fmt.Sprintf("test %d failed: %v", i, err)
 		}
 
-		results = append(results, judgecore.BuildTestResult(runResult, comparison))
+		results = append(results, runResult)
 	}
 
 	return results, ""
+}
+
+func getWorkdirRoots() (string, string) {
+	containerRoot := os.Getenv("JUDGE_WORKDIR_CONTAINER")
+	if containerRoot == "" {
+		containerRoot = "/judge-workdir"
+	}
+
+	hostRoot := os.Getenv("JUDGE_WORKDIR_HOST")
+	if hostRoot == "" {
+		hostRoot = containerRoot
+	}
+
+	return containerRoot, hostRoot
+}
+
+func prepareWorkdir(containerRoot, hostRoot string) (string, string, error) {
+	if err := os.MkdirAll(containerRoot, 0755); err != nil {
+		return "", "", err
+	}
+
+	containerDir, err := os.MkdirTemp(containerRoot, "judge-*")
+	if err != nil {
+		return "", "", err
+	}
+
+	hostDir := filepath.ToSlash(filepath.Join(hostRoot, filepath.Base(containerDir)))
+	return containerDir, hostDir, nil
 }
 
 func validateCode(code string) error {
@@ -114,7 +182,7 @@ func validateCode(code string) error {
 	return nil
 }
 
-func validateTestCases(testCases []judgecore.RunResult) error {
+func validateRunCases(testCases []judgecore.RunResult) error {
 	if len(testCases) == 0 {
 		return errors.New("no test cases provided")
 	}
@@ -124,6 +192,9 @@ func validateTestCases(testCases []judgecore.RunResult) error {
 	for _, testCase := range testCases {
 		if len(testCase.Input) > maxInputSize {
 			return errors.New("input too large")
+		}
+		if testCase.ExpectedOutput == "" {
+			continue
 		}
 		if len(testCase.ExpectedOutput) > maxOutputSize {
 			return errors.New("expected output too large")
@@ -332,6 +403,31 @@ func parseExecResult(stdout, stderr string) (string, string, execMetrics, error)
 	}
 
 	return stdout, cleanStderr, metrics, nil
+}
+
+func buildGeneratedResult(result judgecore.RunResult) judgecore.TestResult {
+	generated := judgecore.TestResult{
+		Input:        result.Input,
+		ActualOutput: result.ActualOutput,
+		Stderr:       result.Stderr,
+		TimeUsedSec:  result.TimeUsedSec,
+		MemoryUsedKB: result.MemoryUsedKB,
+		ExitCode:     result.ExitCode,
+	}
+
+	switch {
+	case result.MemoryExceeded:
+		generated.Status = judgecore.StatusMemoryLimitExceeded
+	case result.TimedOut:
+		generated.Status = judgecore.StatusTimeLimitExceeded
+	case result.ExitCode != 0:
+		generated.Status = judgecore.StatusRuntimeError
+	default:
+		generated.Status = judgecore.StatusAccepted
+		generated.Passed = true
+	}
+
+	return generated
 }
 
 func runEphemeralContainer(

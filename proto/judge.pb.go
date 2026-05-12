@@ -189,6 +189,50 @@ func (x *TestCase) GetExpectedOutput() string {
 	return ""
 }
 
+type InputCase struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Input         string                 `protobuf:"bytes,1,opt,name=input,proto3" json:"input,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InputCase) Reset() {
+	*x = InputCase{}
+	mi := &file_proto_judge_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InputCase) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InputCase) ProtoMessage() {}
+
+func (x *InputCase) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_judge_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InputCase.ProtoReflect.Descriptor instead.
+func (*InputCase) Descriptor() ([]byte, []int) {
+	return file_proto_judge_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *InputCase) GetInput() string {
+	if x != nil {
+		return x.Input
+	}
+	return ""
+}
+
 type ExecuteRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	SubmissionId   string                 `protobuf:"bytes,1,opt,name=submission_id,json=submissionId,proto3" json:"submission_id,omitempty"`
@@ -207,7 +251,7 @@ type ExecuteRequest struct {
 
 func (x *ExecuteRequest) Reset() {
 	*x = ExecuteRequest{}
-	mi := &file_proto_judge_proto_msgTypes[1]
+	mi := &file_proto_judge_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -219,7 +263,7 @@ func (x *ExecuteRequest) String() string {
 func (*ExecuteRequest) ProtoMessage() {}
 
 func (x *ExecuteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_judge_proto_msgTypes[1]
+	mi := &file_proto_judge_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -232,7 +276,7 @@ func (x *ExecuteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteRequest.ProtoReflect.Descriptor instead.
 func (*ExecuteRequest) Descriptor() ([]byte, []int) {
-	return file_proto_judge_proto_rawDescGZIP(), []int{1}
+	return file_proto_judge_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ExecuteRequest) GetSubmissionId() string {
@@ -322,7 +366,7 @@ type TestResult struct {
 
 func (x *TestResult) Reset() {
 	*x = TestResult{}
-	mi := &file_proto_judge_proto_msgTypes[2]
+	mi := &file_proto_judge_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -334,7 +378,7 @@ func (x *TestResult) String() string {
 func (*TestResult) ProtoMessage() {}
 
 func (x *TestResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_judge_proto_msgTypes[2]
+	mi := &file_proto_judge_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -347,7 +391,7 @@ func (x *TestResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TestResult.ProtoReflect.Descriptor instead.
 func (*TestResult) Descriptor() ([]byte, []int) {
-	return file_proto_judge_proto_rawDescGZIP(), []int{2}
+	return file_proto_judge_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *TestResult) GetPassed() bool {
@@ -423,7 +467,7 @@ type ExecuteResponse struct {
 
 func (x *ExecuteResponse) Reset() {
 	*x = ExecuteResponse{}
-	mi := &file_proto_judge_proto_msgTypes[3]
+	mi := &file_proto_judge_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -435,7 +479,7 @@ func (x *ExecuteResponse) String() string {
 func (*ExecuteResponse) ProtoMessage() {}
 
 func (x *ExecuteResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_judge_proto_msgTypes[3]
+	mi := &file_proto_judge_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -448,7 +492,7 @@ func (x *ExecuteResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteResponse.ProtoReflect.Descriptor instead.
 func (*ExecuteResponse) Descriptor() ([]byte, []int) {
-	return file_proto_judge_proto_rawDescGZIP(), []int{3}
+	return file_proto_judge_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ExecuteResponse) GetResults() []*TestResult {
@@ -465,6 +509,242 @@ func (x *ExecuteResponse) GetErrorMessage() string {
 	return ""
 }
 
+type GenerateOutputsRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	TaskId         string                 `protobuf:"bytes,1,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
+	Code           string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
+	Lang           string                 `protobuf:"bytes,3,opt,name=lang,proto3" json:"lang,omitempty"`
+	TestCases      []*InputCase           `protobuf:"bytes,4,rep,name=test_cases,json=testCases,proto3" json:"test_cases,omitempty"`
+	TimeLimitMs    int32                  `protobuf:"varint,5,opt,name=time_limit_ms,json=timeLimitMs,proto3" json:"time_limit_ms,omitempty"`
+	MemoryLimitMb  int32                  `protobuf:"varint,6,opt,name=memory_limit_mb,json=memoryLimitMb,proto3" json:"memory_limit_mb,omitempty"`
+	AdditionalArgs []string               `protobuf:"bytes,7,rep,name=additional_args,json=additionalArgs,proto3" json:"additional_args,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *GenerateOutputsRequest) Reset() {
+	*x = GenerateOutputsRequest{}
+	mi := &file_proto_judge_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GenerateOutputsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GenerateOutputsRequest) ProtoMessage() {}
+
+func (x *GenerateOutputsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_judge_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GenerateOutputsRequest.ProtoReflect.Descriptor instead.
+func (*GenerateOutputsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_judge_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GenerateOutputsRequest) GetTaskId() string {
+	if x != nil {
+		return x.TaskId
+	}
+	return ""
+}
+
+func (x *GenerateOutputsRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *GenerateOutputsRequest) GetLang() string {
+	if x != nil {
+		return x.Lang
+	}
+	return ""
+}
+
+func (x *GenerateOutputsRequest) GetTestCases() []*InputCase {
+	if x != nil {
+		return x.TestCases
+	}
+	return nil
+}
+
+func (x *GenerateOutputsRequest) GetTimeLimitMs() int32 {
+	if x != nil {
+		return x.TimeLimitMs
+	}
+	return 0
+}
+
+func (x *GenerateOutputsRequest) GetMemoryLimitMb() int32 {
+	if x != nil {
+		return x.MemoryLimitMb
+	}
+	return 0
+}
+
+func (x *GenerateOutputsRequest) GetAdditionalArgs() []string {
+	if x != nil {
+		return x.AdditionalArgs
+	}
+	return nil
+}
+
+type GeneratedTestResult struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        TestStatus             `protobuf:"varint,1,opt,name=status,proto3,enum=judge.TestStatus" json:"status,omitempty"`
+	Input         string                 `protobuf:"bytes,2,opt,name=input,proto3" json:"input,omitempty"`
+	Output        string                 `protobuf:"bytes,3,opt,name=output,proto3" json:"output,omitempty"`
+	Stderr        string                 `protobuf:"bytes,4,opt,name=stderr,proto3" json:"stderr,omitempty"`
+	TimeUsedSec   float64                `protobuf:"fixed64,5,opt,name=time_used_sec,json=timeUsedSec,proto3" json:"time_used_sec,omitempty"`
+	MemoryUsedKb  int32                  `protobuf:"varint,6,opt,name=memory_used_kb,json=memoryUsedKb,proto3" json:"memory_used_kb,omitempty"`
+	ExitCode      int32                  `protobuf:"varint,7,opt,name=exit_code,json=exitCode,proto3" json:"exit_code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GeneratedTestResult) Reset() {
+	*x = GeneratedTestResult{}
+	mi := &file_proto_judge_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GeneratedTestResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GeneratedTestResult) ProtoMessage() {}
+
+func (x *GeneratedTestResult) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_judge_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GeneratedTestResult.ProtoReflect.Descriptor instead.
+func (*GeneratedTestResult) Descriptor() ([]byte, []int) {
+	return file_proto_judge_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GeneratedTestResult) GetStatus() TestStatus {
+	if x != nil {
+		return x.Status
+	}
+	return TestStatus_TEST_STATUS_UNSPECIFIED
+}
+
+func (x *GeneratedTestResult) GetInput() string {
+	if x != nil {
+		return x.Input
+	}
+	return ""
+}
+
+func (x *GeneratedTestResult) GetOutput() string {
+	if x != nil {
+		return x.Output
+	}
+	return ""
+}
+
+func (x *GeneratedTestResult) GetStderr() string {
+	if x != nil {
+		return x.Stderr
+	}
+	return ""
+}
+
+func (x *GeneratedTestResult) GetTimeUsedSec() float64 {
+	if x != nil {
+		return x.TimeUsedSec
+	}
+	return 0
+}
+
+func (x *GeneratedTestResult) GetMemoryUsedKb() int32 {
+	if x != nil {
+		return x.MemoryUsedKb
+	}
+	return 0
+}
+
+func (x *GeneratedTestResult) GetExitCode() int32 {
+	if x != nil {
+		return x.ExitCode
+	}
+	return 0
+}
+
+type GenerateOutputsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Results       []*GeneratedTestResult `protobuf:"bytes,1,rep,name=results,proto3" json:"results,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,2,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GenerateOutputsResponse) Reset() {
+	*x = GenerateOutputsResponse{}
+	mi := &file_proto_judge_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GenerateOutputsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GenerateOutputsResponse) ProtoMessage() {}
+
+func (x *GenerateOutputsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_judge_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GenerateOutputsResponse.ProtoReflect.Descriptor instead.
+func (*GenerateOutputsResponse) Descriptor() ([]byte, []int) {
+	return file_proto_judge_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GenerateOutputsResponse) GetResults() []*GeneratedTestResult {
+	if x != nil {
+		return x.Results
+	}
+	return nil
+}
+
+func (x *GenerateOutputsResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_proto_judge_proto protoreflect.FileDescriptor
 
 const file_proto_judge_proto_rawDesc = "" +
@@ -472,7 +752,9 @@ const file_proto_judge_proto_rawDesc = "" +
 	"\x11proto/judge.proto\x12\x05judge\"I\n" +
 	"\bTestCase\x12\x14\n" +
 	"\x05input\x18\x01 \x01(\tR\x05input\x12'\n" +
-	"\x0fexpected_output\x18\x02 \x01(\tR\x0eexpectedOutput\"\xfa\x02\n" +
+	"\x0fexpected_output\x18\x02 \x01(\tR\x0eexpectedOutput\"!\n" +
+	"\tInputCase\x12\x14\n" +
+	"\x05input\x18\x01 \x01(\tR\x05input\"\xfa\x02\n" +
 	"\x0eExecuteRequest\x12#\n" +
 	"\rsubmission_id\x18\x01 \x01(\tR\fsubmissionId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x17\n" +
@@ -499,6 +781,26 @@ const file_proto_judge_proto_rawDesc = "" +
 	"\texit_code\x18\t \x01(\x05R\bexitCode\"c\n" +
 	"\x0fExecuteResponse\x12+\n" +
 	"\aresults\x18\x01 \x03(\v2\x11.judge.TestResultR\aresults\x12#\n" +
+	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\"\xff\x01\n" +
+	"\x16GenerateOutputsRequest\x12\x17\n" +
+	"\atask_id\x18\x01 \x01(\tR\x06taskId\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\tR\x04code\x12\x12\n" +
+	"\x04lang\x18\x03 \x01(\tR\x04lang\x12/\n" +
+	"\n" +
+	"test_cases\x18\x04 \x03(\v2\x10.judge.InputCaseR\ttestCases\x12\"\n" +
+	"\rtime_limit_ms\x18\x05 \x01(\x05R\vtimeLimitMs\x12&\n" +
+	"\x0fmemory_limit_mb\x18\x06 \x01(\x05R\rmemoryLimitMb\x12'\n" +
+	"\x0fadditional_args\x18\a \x03(\tR\x0eadditionalArgs\"\xed\x01\n" +
+	"\x13GeneratedTestResult\x12)\n" +
+	"\x06status\x18\x01 \x01(\x0e2\x11.judge.TestStatusR\x06status\x12\x14\n" +
+	"\x05input\x18\x02 \x01(\tR\x05input\x12\x16\n" +
+	"\x06output\x18\x03 \x01(\tR\x06output\x12\x16\n" +
+	"\x06stderr\x18\x04 \x01(\tR\x06stderr\x12\"\n" +
+	"\rtime_used_sec\x18\x05 \x01(\x01R\vtimeUsedSec\x12$\n" +
+	"\x0ememory_used_kb\x18\x06 \x01(\x05R\fmemoryUsedKb\x12\x1b\n" +
+	"\texit_code\x18\a \x01(\x05R\bexitCode\"t\n" +
+	"\x17GenerateOutputsResponse\x124\n" +
+	"\aresults\x18\x01 \x03(\v2\x1a.judge.GeneratedTestResultR\aresults\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage*\xbd\x01\n" +
 	"\x14OutputComparisonMode\x12&\n" +
 	"\"OUTPUT_COMPARISON_MODE_UNSPECIFIED\x10\x00\x12 \n" +
@@ -514,9 +816,10 @@ const file_proto_judge_proto_rawDesc = "" +
 	"\x0fTEST_STATUS_TLE\x10\x04\x12\x13\n" +
 	"\x0fTEST_STATUS_MLE\x10\x05\x12\x12\n" +
 	"\x0eTEST_STATUS_CE\x10\x06\x12\x12\n" +
-	"\x0eTEST_STATUS_SE\x10\a2K\n" +
+	"\x0eTEST_STATUS_SE\x10\a2\x9d\x01\n" +
 	"\x0fExecutorService\x128\n" +
-	"\aExecute\x12\x15.judge.ExecuteRequest\x1a\x16.judge.ExecuteResponseB\x0fZ\r./proto;judgeb\x06proto3"
+	"\aExecute\x12\x15.judge.ExecuteRequest\x1a\x16.judge.ExecuteResponse\x12P\n" +
+	"\x0fGenerateOutputs\x12\x1d.judge.GenerateOutputsRequest\x1a\x1e.judge.GenerateOutputsResponseB\x0fZ\r./proto;judgeb\x06proto3"
 
 var (
 	file_proto_judge_proto_rawDescOnce sync.Once
@@ -531,27 +834,36 @@ func file_proto_judge_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_judge_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_proto_judge_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_judge_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_proto_judge_proto_goTypes = []any{
-	(OutputComparisonMode)(0), // 0: judge.OutputComparisonMode
-	(TestStatus)(0),           // 1: judge.TestStatus
-	(*TestCase)(nil),          // 2: judge.TestCase
-	(*ExecuteRequest)(nil),    // 3: judge.ExecuteRequest
-	(*TestResult)(nil),        // 4: judge.TestResult
-	(*ExecuteResponse)(nil),   // 5: judge.ExecuteResponse
+	(OutputComparisonMode)(0),       // 0: judge.OutputComparisonMode
+	(TestStatus)(0),                 // 1: judge.TestStatus
+	(*TestCase)(nil),                // 2: judge.TestCase
+	(*InputCase)(nil),               // 3: judge.InputCase
+	(*ExecuteRequest)(nil),          // 4: judge.ExecuteRequest
+	(*TestResult)(nil),              // 5: judge.TestResult
+	(*ExecuteResponse)(nil),         // 6: judge.ExecuteResponse
+	(*GenerateOutputsRequest)(nil),  // 7: judge.GenerateOutputsRequest
+	(*GeneratedTestResult)(nil),     // 8: judge.GeneratedTestResult
+	(*GenerateOutputsResponse)(nil), // 9: judge.GenerateOutputsResponse
 }
 var file_proto_judge_proto_depIdxs = []int32{
 	2, // 0: judge.ExecuteRequest.test_cases:type_name -> judge.TestCase
 	0, // 1: judge.ExecuteRequest.comparison_mode:type_name -> judge.OutputComparisonMode
 	1, // 2: judge.TestResult.status:type_name -> judge.TestStatus
-	4, // 3: judge.ExecuteResponse.results:type_name -> judge.TestResult
-	3, // 4: judge.ExecutorService.Execute:input_type -> judge.ExecuteRequest
-	5, // 5: judge.ExecutorService.Execute:output_type -> judge.ExecuteResponse
-	5, // [5:6] is the sub-list for method output_type
-	4, // [4:5] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	5, // 3: judge.ExecuteResponse.results:type_name -> judge.TestResult
+	3, // 4: judge.GenerateOutputsRequest.test_cases:type_name -> judge.InputCase
+	1, // 5: judge.GeneratedTestResult.status:type_name -> judge.TestStatus
+	8, // 6: judge.GenerateOutputsResponse.results:type_name -> judge.GeneratedTestResult
+	4, // 7: judge.ExecutorService.Execute:input_type -> judge.ExecuteRequest
+	7, // 8: judge.ExecutorService.GenerateOutputs:input_type -> judge.GenerateOutputsRequest
+	6, // 9: judge.ExecutorService.Execute:output_type -> judge.ExecuteResponse
+	9, // 10: judge.ExecutorService.GenerateOutputs:output_type -> judge.GenerateOutputsResponse
+	9, // [9:11] is the sub-list for method output_type
+	7, // [7:9] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_judge_proto_init() }
@@ -565,7 +877,7 @@ func file_proto_judge_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_judge_proto_rawDesc), len(file_proto_judge_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   4,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

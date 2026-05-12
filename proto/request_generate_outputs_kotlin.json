@@ -1,0 +1,19 @@
+{
+  "task_id": "square-task",
+  "code": "fun main() {\n    val x = readln().trim().toLong()\n    println(x * x)\n}",
+  "lang": "kotlin",
+  "test_cases": [
+    {
+      "input": "5"
+    },
+    {
+      "input": "-3"
+    },
+    {
+      "input": "11"
+    }
+  ],
+  "time_limit_ms": 1000,
+  "memory_limit_mb": 256,
+  "additional_args": []
+}

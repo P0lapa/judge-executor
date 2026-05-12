@@ -1,0 +1,19 @@
+{
+  "task_id": "square-task",
+  "code": "x = int(input())\nprint(x * x)",
+  "lang": "python",
+  "test_cases": [
+    {
+      "input": "5"
+    },
+    {
+      "input": "-3"
+    },
+    {
+      "input": "10"
+    }
+  ],
+  "time_limit_ms": 1000,
+  "memory_limit_mb": 256,
+  "additional_args": []
+}

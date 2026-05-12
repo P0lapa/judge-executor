@@ -1,0 +1,19 @@
+{
+  "task_id": "square-task",
+  "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        long x = scanner.nextLong();\n        System.out.println(x * x);\n    }\n}",
+  "lang": "java",
+  "test_cases": [
+    {
+      "input": "5"
+    },
+    {
+      "input": "-3"
+    },
+    {
+      "input": "7"
+    }
+  ],
+  "time_limit_ms": 1000,
+  "memory_limit_mb": 256,
+  "additional_args": []
+}
